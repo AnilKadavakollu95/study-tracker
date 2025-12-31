@@ -3,205 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anil Kadavakollu - Mechanical Engineer Portfolio</title>
+    <title>Study Progress Tracker - Real-time Notifications</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
             padding: 20px;
         }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         header {
             background: white;
-            padding: 40px 0;
-            text-align: center;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            margin-top: 40px;
+            margin-bottom: 30px;
+            text-align: center;
         }
+
         h1 {
             color: #667eea;
-            font-size: 2.5em;
             margin-bottom: 10px;
         }
+
         .subtitle {
             color: #666;
-            font-size: 1.2em;
-            margin-bottom: 15px;
+            font-size: 1.1em;
         }
-        .contact-info {
-            color: #999;
-            font-size: 0.95em;
-        }
-        .contact-info a {
-            color: #667eea;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        .contact-info a:hover {
-            text-decoration: underline;
-        }
-        .section {
-            background: white;
-            padding: 30px;
+
+        .tracker-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
+        }
+
+        .subject-card {
+            background: white;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }
-        .section h2 {
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .subject-title {
             color: #667eea;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #eee;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
             margin-top: 15px;
         }
-        .skill-tag {
-            background: #f0f0f0;
-            padding: 10px 15px;
+
+        button {
+            flex: 1;
+            padding: 10px;
+            border: none;
             border-radius: 5px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        button.complete {
+            background: #4CAF50;
+        }
+
+        button.complete:hover {
+            background: #45a049;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .stats {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
             text-align: center;
-            font-weight: 600;
+        }
+
+        .stat-item h3 {
             color: #667eea;
-            border: 2px solid #667eea;
-        }
-        .experience-item {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        .experience-item:last-child {
-            border-bottom: none;
-        }
-        .job-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #333;
+            font-size: 2em;
             margin-bottom: 5px;
         }
-        .company {
-            color: #667eea;
-            font-weight: 500;
-            margin-bottom: 3px;
-        }
-        .date {
-            color: #999;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-        }
-        .description {
+
+        .stat-item p {
             color: #666;
-            line-height: 1.8;
+            font-size: 0.9em;
         }
-        footer {
-            text-align: center;
-            color: white;
-            padding: 20px 0;
-            margin-top: 40px;
+
+        .reminder-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
         }
-        footer a {
-            color: white;
-            margin: 0 10px;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
+
+        .reminder-box p {
+            color: #856404;
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Anil Kadavakollu</h1>
-            <p class="subtitle">Mechanical Engineer | Quality Control Specialist | CAD Designer</p>
-            <div class="contact-info">
-                <a href="mailto:your.email@example.com">Email</a> |
-                <a href="https://www.linkedin.com/in/anil-kadavakollu" target="_blank">LinkedIn</a> |
-                <a href="https://github.com/AnilKadavakollu95" target="_blank">GitHub</a>
-            </div>
+            <h1>⚡ Study Progress Tracker</h1>
+            <p class="subtitle">Track your daily learning progress with real-time notifications</p>
         </header>
 
-        <div class="section">
-            <h2>About Me</h2>
-            <p>Mechanical Engineering student at PVPSIT Vijayawada with hands-on experience in quality control, casting, and CAD design. Passionate about manufacturing processes, design engineering, and continuous learning in automotive and industrial applications.</p>
-        </div>
-
-        <div class="section">
-            <h2>Professional Experience</h2>
-            
-            <div class="experience-item">
-                <div class="job-title">Quality Engineer</div>
-                <div class="company">Orient Electrical</div>
-                <div class="date">2024 - Present</div>
-                <div class="description">Responsible for quality assurance and control in manufacturing processes.</div>
+        <div class="stats">
+            <div class="stat-item">
+                <h3 id="totalProgress">0%</h3>
+                <p>Overall Progress</p>
             </div>
-
-            <div class="experience-item">
-                <div class="job-title">Quality Control / Design Engineer</div>
-                <div class="company">GS Casting Alloys</div>
-                <div class="date">2023 - 2024</div>
-                <div class="description">Conducted casting process observation, quality control inspections, and design engineering tasks. Gained expertise in casting defect analysis and quality standards.</div>
+            <div class="stat-item">
+                <h3 id="completedCount">0</h3>
+                <p>Subjects Completed</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="streakCount">0</h3>
+                <p>Day Streak</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="hoursLogged">0</h3>
+                <p>Hours Logged</p>
             </div>
         </div>
 
-        <div class="section">
-            <h2>Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-tag">AutoCAD</div>
-                <div class="skill-tag">CAD Design</div>
-                <div class="skill-tag">Quality Control</div>
-                <div class="skill-tag">Manufacturing</div>
-                <div class="skill-tag">Casting Process</div>
-                <div class="skill-tag">Python</div>
-                <div class="skill-tag">Excel</div>
-                <div class="skill-tag">SQL</div>
-                <div class="skill-tag">Google Cloud</div>
-                <div class="skill-tag">SAP</div>
-            </div>
+        <div class="tracker-section" id="trackerContainer">
+            <!-- Study subjects will be added here -->
         </div>
 
-        <div class="section">
-            <h2>Education</h2>
-            <div class="experience-item">
-                <div class="job-title">DTE (Diploma in Technical Education)</div>
-                <div class="company">PVPSIT Vijayawada</div>
-                <div class="date">Mechanical Engineering</div>
-                <div class="description">Focused on automotive and manufacturing engineering with emphasis on CAD, design of machine elements, and industrial processes.</div>
-            </div>
+        <div class="reminder-box">
+            <p>🔔 <strong>Daily Reminder:</strong> Keep up your learning momentum! Every 24 hours you complete your studies, you maintain your streak.</p>
+            <p id="nextReminder"></p>
         </div>
-
-        <div class="section">
-            <h2>Certifications & Learning</h2>
-            <div class="skills-grid">
-                <div class="skill-tag">AutoCAD 2026</div>
-                <div class="skill-tag">Autodesk Inventor</div>
-                <div class="skill-tag">Google Cloud Data Analytics</div>
-                <div class="skill-tag">Cybersecurity Basics</div>
-                <div class="skill-tag">HackerRank Python</div>
-            </div>
-        </div>
-
-        <footer>
-            <p>&copy; 2026 Anil Kadavakollu | All Rights Reserved</p>
-            <p><a href="https://github.com/AnilKadavakollu95/study-tracker" target="_blank">View Study Tracker Project</a></p>
-        </footer>
     </div>
+
+    <script>
+        // Study subjects to track
+        const subjects = [
+            { id: 1, name: 'AutoCAD 2026', dailyGoal: 2, icon: '📋' },
+            { id: 2, name: 'SQL & Database', dailyGoal: 1.5, icon: '🖣' },
+            { id: 3, name: 'Python Programming', dailyGoal: 2, icon: '🐍' },
+            { id: 4, name: 'Google Cloud', dailyGoal: 1.5, icon: '☁️' },
+            { id: 5, name: 'Cybersecurity', dailyGoal: 1.5, icon: '🔐' },
+            { id: 6, name: 'Excel & Data', dailyGoal: 1, icon: '📊' },
+            { id: 7, name: 'Quality Control', dailyGoal: 1.5, icon: '✓' },
+            { id: 8, name: 'English & Communication', dailyGoal: 1, icon: '💬' }
+        ];
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('studyData');
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        // Save data to localStorage
+        function saveData(data) {
+            localStorage.setItem('studyData', JSON.stringify(data));
+        }
+
+        // Initialize tracker
+        function initializeTracker() {
+            const container = document.getElementById('trackerContainer');
+            container.innerHTML = '';
+
+            subjects.forEach(subject => {
+                const data = loadData();
+                const subjectData = data[subject.id] || { progress: 0, hoursLogged: 0 };
+                
+                const card = document.createElement('div');
+                card.className = 'subject-card';
+                card.innerHTML = `
+                    <div class="subject-title">${subject.icon} ${subject.name}</div>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 10px;">Daily Goal: ${subject.dailyGoal}h</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${Math.min(subjectData.progress, 100)}%">${Math.round(subjectData.progress)}%</div>
+                    </div>
+                    <p style="color: #999; font-size: 0.85em; margin: 10px 0;">Hours logged today: ${subjectData.hoursLogged}h</p>
+                    <div class="controls">
+                        <button onclick="addProgress(${subject.id}, ${subject.dailyGoal})">+30 min</button>
+                        <button onclick="completeSubject(${subject.id})" class="complete">✓ Complete</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Add 30 minutes to subject
+        function addProgress(subjectId, dailyGoal) {
+            const data = loadData();
+            if (!data[subjectId]) {
+                data[subjectId] = { progress: 0, hoursLogged: 0 };
+            }
+            
+            data[subjectId].hoursLogged += 0.5;
+            data[subjectId].progress = Math.min((data[subjectId].hoursLogged / dailyGoal) * 100, 100);
+            
+            saveData(data);
+            initializeTracker();
+            updateStats();
+            showNotification(`Added 30 minutes to ${getSubjectName(subjectId)}!`);
+        }
+
+        // Complete subject
+        function completeSubject(subjectId) {
+            const data = loadData();
+            if (!data[subjectId]) {
+                data[subjectId] = { progress: 0, hoursLogged: 0 };
+            }
+            
+            data[subjectId].progress = 100;
+            saveData(data);
+            initializeTracker();
+            updateStats();
+            showNotification(`Great! ${getSubjectName(subjectId)} completed for today! 🌟`);
+        }
+
+        // Get subject name by ID
+        function getSubjectName(id) {
+            const subject = subjects.find(s => s.id === id);
+            return subject ? subject.name : 'Subject';
+        }
+
+        // Update statistics
+        function updateStats() {
+            const data = loadData();
+            let totalProgress = 0;
+            let completedCount = 0;
+            let totalHours = 0;
+
+            subjects.forEach(subject => {
+                const subjectData = data[subject.id] || { progress: 0, hoursLogged: 0 };
+                totalProgress += subjectData.progress;
+                if (subjectData.progress === 100) completedCount++;
+                totalHours += subjectData.hoursLogged;
+            });
+
+            const avgProgress = Math.round(totalProgress / subjects.length);
+            document.getElementById('totalProgress').textContent = avgProgress + '%';
+            document.getElementById('completedCount').textContent = completedCount;
+            document.getElementById('hoursLogged').textContent = totalHours.toFixed(1);
+
+            // Update streak
+            const streakData = localStorage.getItem('streak') || '0';
+            document.getElementById('streakCount').textContent = streakData;
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.textContent = message;
+            document.body.appendChild(notif);
+
+            setTimeout(() => {
+                notif.remove();
+            }, 3000);
+        }
+
+        // Schedule daily reminder
+        function scheduleDailyReminder() {
+            const now = new Date();
+            const next = new Date(now);
+            next.setDate(next.getDate() + 1);
+            next.setHours(9, 0, 0, 0);
+
+            const timeUntil = next - now;
+            document.getElementById('nextReminder').textContent = `Next reminder at 9:00 AM tomorrow`;
+
+            setTimeout(() => {
+                showNotification('📚 Daily Study Reminder! Time to log your progress!');
+                scheduleDailyReminder();
+            }, timeUntil);
+        }
+
+        // Request notification permission
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                if (Notification.permission === 'granted') {
+                    console.log('Notifications already enabled');
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            new Notification('Study Tracker Active', {
+                                body: 'You will receive daily study reminders!',
+                                icon: '📚'
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            requestNotificationPermission();
+            initializeTracker();
+            updateStats();
+            scheduleDailyReminder();
+        });
+    </script>
 </body>
 </html>
