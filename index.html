@@ -220,7 +220,7 @@
 
     <script>
         // Study subjects to track
-const subjects = [
+let subjects = JSON.parse(localStorage.getItem('topics')) || [
  { id: 1, name: 'AutoCAD & SolidWorks 2026', dailyGoal: 1, icon: '📋' },
  { id: 2, name: 'SQL & Database', dailyGoal: 1.5, icon: '🖣' },
  { id: 5, name: 'AI + Cybersecurity 2026', dailyGoal: 1.5, icon: '🔐' },
