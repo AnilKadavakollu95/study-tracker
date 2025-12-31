@@ -1,1 +1,207 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><title>Study Tracker</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f3f4f6}header{background:#2563eb;color:white;padding:20px;text-align:center}main{max-width:1000px;margin:20px auto;background:white;padding:20px;border-radius:10px}.container{margin:20px 0}.form-row{display:flex;gap:10px;margin:10px 0;align-items:center}label{min-width:150px}input{padding:8px;border:1px solid #ddd;border-radius:4px}button{background:#2563eb;color:white;border:none;padding:10px 20px;cursor:pointer;border-radius:4px;margin:5px}button:hover{background:#1e40af}table{width:100%;border-collapse:collapse;margin:20px 0}th,td{border:1px solid #ddd;padding:10px;text-align:center}th{background:#f3f4f6}.status-badge{padding:4px 8px;border-radius:4px;color:white;font-size:12px}.status-great{background:#16a34a}.status-okay{background:#f59e0b}.status-low{background:#dc2626}.schedule-box{background:#f9fafb;padding:15px;margin:10px 0;border-left:4px solid #2563eb;border-radius:4px}</style></head><body><header><h1>Study Tracker with Smart Notifications</h1><p>SQL | Excel | CAD | Cyber | English | Typing | Amazon Shift</p></header><main><div class="container"><h2>Daily Data Entry</h2><div class="form-row"><label>Date:</label><input type="date" id="date"/></div><div class="form-row"><label>Sleep (hrs):</label><input type="number" id="sleep" value="6" min="0" step="0.5"/></div><div class="form-row"><label>SQL (hrs):</label><input type="number" id="sql" value="1" min="0" step="0.5"/></div><div class="form-row"><label>Excel (hrs):</label><input type="number" id="excel" value="1" min="0" step="0.5"/></div><div class="form-row"><label>CAD (hrs):</label><input type="number" id="cad" value="1" min="0" step="0.5"/></div><div class="form-row"><label>Cyber Security (hrs):</label><input type="number" id="cyber" value="1" min="0" step="0.5"/></div><div class="form-row"><label>English (hrs):</label><input type="number" id="english" value="0.5" min="0" step="0.5"/></div><div class="form-row"><label>Typing (hrs):</label><input type="number" id="typing" value="0.5" min="0" step="0.5"/></div><div class="form-row"><label>Notes:</label><input type="text" id="notes" placeholder="Topics covered"/></div><button onclick="saveDay()">Save Day</button><button onclick="enableNotifications()" class="secondary">Enable Notifications</button><button onclick="testNotification()" class="secondary">Test Alert</button><button onclick="clearData()" style="background:#dc2626">Clear Data</button></div><div class="container"><h2>Daily Schedule with Notifications</h2><div id="scheduleContainer"></div></div><div class="container"><h2>Progress History</h2><table><thead><tr><th>Date</th><th>Sleep</th><th>SQL</th><th>Excel</th><th>CAD</th><th>Cyber</th><th>English</th><th>Typing</th><th>Total</th><th>Status</th></tr></thead><tbody id="history"></tbody></table></div></main><script>const SCHEDULE=[{time:'05:30',end:'06:00',task:'Fresh up + Snack',emoji:'🌅',msg:'Wake up! Fresh up time'},{time:'06:00',end:'07:00',task:'SQL Practice',emoji:'🗄️',msg:'SQL time! Open w3schools or HackerRank'},{time:'07:00',end:'07:30',task:'Typing',emoji:'⌨️',msg:'Typing time! typingclub.com'},{time:'07:30',end:'08:15',task:'Get Ready + Travel',emoji:'🚗',msg:'Get ready! Travel to Amazon'},{time:'08:30',end:'18:30',task:'Amazon Shift',emoji:'💼',msg:'Work shift'},{time:'18:30',end:'19:00',task:'Travel + Rest',emoji:'🏠',msg:'Travel home, rest 30min'},{time:'19:00',end:'19:30',task:'Dinner',emoji:'🍽️',msg:'Dinner time - relax'},{time:'19:30',end:'20:30',task:'CAD Study',emoji:'🖥️',msg:'CAD time! AutoCAD/SolidWorks'},{time:'20:30',end:'21:30',task:'Excel Study',emoji:'📊',msg:'Excel practice time'},{time:'21:30',end:'23:30',task:'Cyber Security',emoji:'🔐',msg:'Cyber Security! Cisco NetAcad'},{time:'23:30',end:'00:00',task:'English',emoji:'🎤',msg:'English practice - self talk'}];function todayISO(){const d=new Date();const off=d.getTimezoneOffset();const local=new Date(d.getTime()-off*60000);return local.toISOString().slice(0,10)}function loadData(){const raw=localStorage.getItem('studyData');return raw?JSON.parse(raw):[]}function saveData(data){localStorage.setItem('studyData',JSON.stringify(data))}function saveDay(){const date=document.getElementById('date').value||todayISO();const sleep=parseFloat(document.getElementById('sleep').value)||0;const sql=parseFloat(document.getElementById('sql').value)||0;const excel=parseFloat(document.getElementById('excel').value)||0;const cad=parseFloat(document.getElementById('cad').value)||0;const cyber=parseFloat(document.getElementById('cyber').value)||0;const english=parseFloat(document.getElementById('english').value)||0;const typing=parseFloat(document.getElementById('typing').value)||0;const notes=document.getElementById('notes').value||'';const total=(sql+excel+cad+cyber+english+typing).toFixed(1);const status=total>=5?'Great':total>=3?'Okay':'Low';let data=loadData();const idx=data.findIndex(d=>d.date===date);const entry={date,sleep,sql,excel,cad,cyber,english,typing,total,status,notes};if(idx>=0){data[idx]=entry}else{data.push(entry)}saveData(data);refreshHistory();alert('Day saved!');document.getElementById('notes').value=''}function clearData(){if(confirm('Delete all data?')){localStorage.removeItem('studyData');refreshHistory()}}function refreshHistory(){const data=loadData();const tbody=document.getElementById('history');tbody.innerHTML='';data.sort((a,b)=>b.date.localeCompare(a.date)).forEach(entry=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${entry.date}</td><td>${entry.sleep}</td><td>${entry.sql}</td><td>${entry.excel}</td><td>${entry.cad}</td><td>${entry.cyber}</td><td>${entry.english}</td><td>${entry.typing}</td><td>${entry.total}</td><td><span class="status-badge status-${entry.status.toLowerCase()}">${entry.status}</span></td>`;tbody.appendChild(tr)})}function enableNotifications(){if(!('Notification' in window)){alert('Notifications not supported');return}if(Notification.permission==='granted'){notificationsActive=true;alert('Notifications enabled!');startNotificationCheck()}else if(Notification.permission!=='denied'){Notification.requestPermission().then(p=>{if(p==='granted'){notificationsActive=true;alert('Notifications enabled!');startNotificationCheck()}})}}function testNotification(){if(Notification.permission==='granted'){new Notification('Study Reminder','Study time! Keep focused!')}}let notificationsActive=false;function startNotificationCheck(){setInterval(()=>{const now=new Date();const hh=String(now.getHours()).padStart(2,'0');const mm=String(now.getMinutes()).padStart(2,'0');const current=`${hh}:${mm}`;SCHEDULE.forEach(slot=>{if(current===slot.time&&notificationsActive){new Notification(slot.emoji+' '+slot.task,{body:slot.msg,icon:''}).onclose=()=>{}}})},60000)}function renderSchedule(){const container=document.getElementById('scheduleContainer');container.innerHTML='';SCHEDULE.forEach(slot=>{const div=document.createElement('div');div.className='schedule-box';div.innerHTML=`<strong>${slot.emoji} ${slot.time}-${slot.end}</strong><br/>${slot.task}<br/><small>${slot.msg}</small>`;container.appendChild(div)})}document.getElementById('date').value=todayISO();renderSchedule();refreshHistory()</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anil Kadavakollu - Mechanical Engineer Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: white;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            margin-top: 40px;
+        }
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .contact-info {
+            color: #999;
+            font-size: 0.95em;
+        }
+        .contact-info a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .skill-tag {
+            background: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        .experience-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .experience-item:last-child {
+            border-bottom: none;
+        }
+        .job-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .company {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        .date {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .description {
+            color: #666;
+            line-height: 1.8;
+        }
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        footer a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Anil Kadavakollu</h1>
+            <p class="subtitle">Mechanical Engineer | Quality Control Specialist | CAD Designer</p>
+            <div class="contact-info">
+                <a href="mailto:your.email@example.com">Email</a> |
+                <a href="https://www.linkedin.com/in/anil-kadavakollu" target="_blank">LinkedIn</a> |
+                <a href="https://github.com/AnilKadavakollu95" target="_blank">GitHub</a>
+            </div>
+        </header>
+
+        <div class="section">
+            <h2>About Me</h2>
+            <p>Mechanical Engineering student at PVPSIT Vijayawada with hands-on experience in quality control, casting, and CAD design. Passionate about manufacturing processes, design engineering, and continuous learning in automotive and industrial applications.</p>
+        </div>
+
+        <div class="section">
+            <h2>Professional Experience</h2>
+            
+            <div class="experience-item">
+                <div class="job-title">Quality Engineer</div>
+                <div class="company">Orient Electrical</div>
+                <div class="date">2024 - Present</div>
+                <div class="description">Responsible for quality assurance and control in manufacturing processes.</div>
+            </div>
+
+            <div class="experience-item">
+                <div class="job-title">Quality Control / Design Engineer</div>
+                <div class="company">GS Casting Alloys</div>
+                <div class="date">2023 - 2024</div>
+                <div class="description">Conducted casting process observation, quality control inspections, and design engineering tasks. Gained expertise in casting defect analysis and quality standards.</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-tag">AutoCAD</div>
+                <div class="skill-tag">CAD Design</div>
+                <div class="skill-tag">Quality Control</div>
+                <div class="skill-tag">Manufacturing</div>
+                <div class="skill-tag">Casting Process</div>
+                <div class="skill-tag">Python</div>
+                <div class="skill-tag">Excel</div>
+                <div class="skill-tag">SQL</div>
+                <div class="skill-tag">Google Cloud</div>
+                <div class="skill-tag">SAP</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Education</h2>
+            <div class="experience-item">
+                <div class="job-title">DTE (Diploma in Technical Education)</div>
+                <div class="company">PVPSIT Vijayawada</div>
+                <div class="date">Mechanical Engineering</div>
+                <div class="description">Focused on automotive and manufacturing engineering with emphasis on CAD, design of machine elements, and industrial processes.</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Certifications & Learning</h2>
+            <div class="skills-grid">
+                <div class="skill-tag">AutoCAD 2026</div>
+                <div class="skill-tag">Autodesk Inventor</div>
+                <div class="skill-tag">Google Cloud Data Analytics</div>
+                <div class="skill-tag">Cybersecurity Basics</div>
+                <div class="skill-tag">HackerRank Python</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Anil Kadavakollu | All Rights Reserved</p>
+            <p><a href="https://github.com/AnilKadavakollu95/study-tracker" target="_blank">View Study Tracker Project</a></p>
+        </footer>
+    </div>
+</body>
+</html>
