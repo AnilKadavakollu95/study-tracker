@@ -209,6 +209,10 @@
         </div>
 
         <div class="reminder-box">
+                    <div style="margin-top: 20px; text-align: center;">
+            <button id="addTopicBtn" onclick="addNewTopic()" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">+ Add Topic</button>
+            <button id="deleteTopicBtn" onclick="deleteLastTopic()" style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">- Delete Topic</button>
+        </div>
             <p>🔔 <strong>Daily Reminder:</strong> Keep up your learning momentum! Every 24 hours you complete your studies, you maintain your streak.</p>
             <p id="nextReminder"></p>
         </div>
@@ -217,13 +221,11 @@
     <script>
         // Study subjects to track
         const subjects = [
-            { id: 1, name: 'AutoCAD 2026', dailyGoal: 2, icon: '📋' },
+        { id: 1, name: 'AutoCAD & SolidWorks 2026', dailyGoal: 1, icon: '📋' },
             { id: 2, name: 'SQL & Database', dailyGoal: 1.5, icon: '🖣' },
-            { id: 3, name: 'Python Programming', dailyGoal: 2, icon: '🐍' },
-            { id: 4, name: 'Google Cloud', dailyGoal: 1.5, icon: '☁️' },
-            { id: 5, name: 'Cybersecurity', dailyGoal: 1.5, icon: '🔐' },
+        { id: 5, name: 'AI + Cybersecurity 2026', dailyGoal: 1.5, icon: '🔐' },
             { id: 6, name: 'Excel & Data', dailyGoal: 1, icon: '📊' },
-            { id: 7, name: 'Quality Control', dailyGoal: 1.5, icon: '✓' },
+        { id: 7, name: 'Typing', dailyGoal: 0.5, icon: '⌨️' },
             { id: 8, name: 'English & Communication', dailyGoal: 1, icon: '💬' }
         ];
 
@@ -378,6 +380,41 @@
             updateStats();
             scheduleDailyReminder();
         });
+    
+
+        // Add new topic
+        function addNewTopic() {
+            const topicName = prompt('Enter topic name:', '');
+            const dailyGoalHours = prompt('Enter daily goal in hours (e.g., 1 for 1 hour, 0.5 for 30 min):', '1');
+            const iconEmoji = prompt('Enter emoji icon:', '📚');
+            
+            if (topicName && dailyGoalHours) {
+                const newId = Math.max(...subjects.map(s => s.id)) + 1;
+                const newTopic = {
+                    id: newId,
+                    name: topicName,
+                    dailyGoal: parseFloat(dailyGoalHours),
+                    icon: iconEmoji
+                };
+                subjects.push(newTopic);
+                saveData(loadData());
+                location.reload();
+            }
+        }
+        
+        // Delete last topic
+        function deleteLastTopic() {
+            if (subjects.length > 1) {
+                const lastTopic = subjects[subjects.length - 1];
+                if (confirm(`Delete topic "${lastTopic.name}"?`)) {
+                    subjects.pop();
+                    saveData(loadData());
+                    location.reload();
+                }
+            } else {
+                alert('Cannot delete the last topic!');
+            }
+        }
     </script>
 </body>
 </html>
