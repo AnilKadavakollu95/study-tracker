@@ -220,15 +220,15 @@
 
     <script>
         // Study subjects to track
-        const subjects = [
-        { id: 1, name: 'AutoCAD & SolidWorks 2026', dailyGoal: 1, icon: '📋' },
-            { id: 2, name: 'SQL & Database', dailyGoal: 1.5, icon: '🖣' },
-        { id: 5, name: 'AI + Cybersecurity 2026', dailyGoal: 1.5, icon: '🔐' },
-            { id: 6, name: 'Excel & Data', dailyGoal: 1, icon: '📊' },
-        { id: 7, name: 'Typing', dailyGoal: 0.5, icon: '⌨️' },
-            { id: 8, name: 'English & Communication', dailyGoal: 1, icon: '💬' }
-        ];
-
+const defaultSubjects = [
+ { id: 1, name: 'AutoCAD & SolidWorks 2026', dailyGoal: 1, icon: '📋' },
+ { id: 2, name: 'SQL & Database', dailyGoal: 1.5, icon: '🖣' },
+ { id: 5, name: 'AI + Cybersecurity 2026', dailyGoal: 1.5, icon: '🔐' },
+ { id: 6, name: 'Excel & Data', dailyGoal: 1, icon: '📊' },
+ { id: 7, name: 'Typing', dailyGoal: 0.5, icon: '⌨️' },
+ { id: 8, name: 'English & Communication', dailyGoal: 1, icon: '💬' }
+ ];
+ let subjects = JSON.parse(localStorage.getItem('topics')) || defaultSubjects;
         // Load data from localStorage
         function loadData() {
             const saved = localStorage.getItem('studyData');
@@ -397,8 +397,9 @@
                     icon: iconEmoji
                 };
                 subjects.push(newTopic);
-                saveData(loadData());
-                location.reload();
+localStorage.setItem('topics', JSON.stringify(subjects));
+     initializeTracker();
+     updateStats();
             }
         }
         
