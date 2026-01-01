@@ -1,433 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anil 2026 Study Project - Real-time Notifications</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .tracker-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .subject-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .subject-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .subject-title {
-            color: #667eea;
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 25px;
-            background: #eee;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.8em;
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background: #667eea;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: #764ba2;
-        }
-
-        button.complete {
-            background: #4CAF50;
-        }
-
-        button.complete:hover {
-            background: #45a049;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            animation: slideIn 0.3s ease;
-            z-index: 1000;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-            }
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        .stats {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            text-align: center;
-        }
-
-        .stat-item h3 {
-            color: #667eea;
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-
-        .stat-item p {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .reminder-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
-
-        .reminder-box p {
-            color: #856404;
-            margin: 5px 0;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anil 2026 Study Project - Real-time Notifications</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; }
+header { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 30px; text-align: center; }
+h1 { color: #667eea; margin-bottom: 10px; }
+.subtitle { color: #666; font-size: 1.1em; }
+.tracker-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.subject-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s; }
+.subject-card:hover { transform: translateY(-5px); }
+.subject-title { color: #667eea; font-size: 1.3em; margin-bottom: 15px; font-weight: 600; }
+.progress-bar { width: 100%; height: 25px; background: #eee; border-radius: 15px; overflow: hidden; margin: 15px 0; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.5s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8em; }
+.controls { display: flex; gap: 10px; margin-top: 15px; }
+button { flex: 1; padding: 10px; border: none; border-radius: 5px; background: #667eea; color: white; cursor: pointer; font-weight: 600; transition: background 0.3s; }
+button:hover { background: #764ba2; }
+button.complete { background: #4CAF50; }
+button.complete:hover { background: #45a049; }
+.notification { position: fixed; top: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); animation: slideIn 0.3s ease; z-index: 1000; }
+@keyframes slideIn { from { transform: translateX(400px); } to { transform: translateX(0); } }
+.stats { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; text-align: center; }
+.stat-item h3 { color: #667eea; font-size: 2em; margin-bottom: 5px; }
+.stat-item p { color: #666; font-size: 0.9em; }
+.reminder-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 5px; margin-top: 15px; }
+.reminder-box p { color: #856404; margin: 5px 0; }
+.button-group { margin: 20px 0; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.button-group button { padding: 12px 20px; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>⚡ Anil 2026 Study Project</h1>
-            <p class="subtitle">Track your daily learning progress with real-time notifications</p>
-        </header>
-
-        <div class="stats">
-            <div class="stat-item">
-                <h3 id="totalProgress">0%</h3>
-                <p>Overall Progress</p>
-            </div>
-            <div class="stat-item">
-                <h3 id="completedCount">0</h3>
-                <p>Subjects Completed</p>
-            </div>
-            <div class="stat-item">
-                <h3 id="streakCount">0</h3>
-                <p>Day Streak</p>
-            </div>
-            <div class="stat-item">
-                <h3 id="hoursLogged">0</h3>
-                <p>Hours Logged</p>
-            </div>
-        </div>
-
-        <div class="tracker-section" id="trackerContainer">
-            <!-- Study subjects will be added here -->
-        </div>
-
-        <div class="reminder-box">
-                    <div style="margin-top: 20px; text-align: center;">
-            <button id="addTopicBtn" onclick="addNewTopic()" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">+ Add Topic</button>
-            <button id="deleteTopicBtn" onclick="deleteLastTopic()" style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">- Delete Topic</button>
-        </div>
-            <p>🔔 <strong>Daily Reminder:</strong> Keep up your learning momentum! Every 24 hours you complete your studies, you maintain your streak.</p>
-            <p id="nextReminder"></p>
-        </div>
-    </div>
-
-    <script>
-        // Study subjects to track
-let stored = localStorage.getItem('topics'); let subjects = stored ? JSON.parse(stored) : [
- { id: 1, name: 'AutoCAD & SolidWorks 2026', dailyGoal: 1, icon: '📋' },
- { id: 2, name: 'SQL & Database', dailyGoal: 1.5, icon: '🖣' },
- { id: 5, name: 'AI + Cybersecurity 2026', dailyGoal: 1.5, icon: '🔐' },
- { id: 6, name: 'Excel & Data', dailyGoal: 1, icon: '📊' },
- { id: 7, name: 'Typing', dailyGoal: 0.5, icon: '⌨️' },
- { id: 8, name: 'English & Communication', dailyGoal: 1, icon: '💬' }
- ];
-
-        // Load data from localStorage
-        function loadData() {
-            const saved = localStorage.getItem('studyData');
-            return saved ? JSON.parse(saved) : {};
-        }
-
-        // Save data to localStorage
-        function saveData(data) {
-            localStorage.setItem('studyData', JSON.stringify(data));
-        }
-
-        // Initialize tracker
-        function initializeTracker() {
-            const container = document.getElementById('trackerContainer');
-            container.innerHTML = '';
-
-            subjects.forEach(subject => {
-                const data = loadData();
-                const subjectData = data[subject.id] || { progress: 0, hoursLogged: 0 };
-                
-                const card = document.createElement('div');
-                card.className = 'subject-card';
-                card.innerHTML = `
-                    <div class="subject-title">${subject.icon} ${subject.name}</div>
-                    <p style="color: #666; font-size: 0.9em; margin-bottom: 10px;">Daily Goal: ${subject.dailyGoal}h</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${Math.min(subjectData.progress, 100)}%">${Math.round(subjectData.progress)}%</div>
-                    </div>
-                    <p style="color: #999; font-size: 0.85em; margin: 10px 0;">Hours logged today: ${subjectData.hoursLogged}h</p>
-                    <div class="controls">
-                        <button onclick="addProgress(${subject.id}, ${subject.dailyGoal})">+30 min</button>
-                        <button onclick="completeSubject(${subject.id})" class="complete">✓ Complete</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Add 30 minutes to subject
-        function addProgress(subjectId, dailyGoal) {
-            const data = loadData();
-            if (!data[subjectId]) {
-                data[subjectId] = { progress: 0, hoursLogged: 0 };
-            }
-            
-            data[subjectId].hoursLogged += 0.5;
-            data[subjectId].progress = Math.min((data[subjectId].hoursLogged / dailyGoal) * 100, 100);
-            
-            saveData(data);
-            initializeTracker();
-            updateStats();
-            showNotification(`Added 30 minutes to ${getSubjectName(subjectId)}!`);
-        }
-
-        // Complete subject
-        function completeSubject(subjectId) {
-            const data = loadData();
-            if (!data[subjectId]) {
-                data[subjectId] = { progress: 0, hoursLogged: 0 };
-            }
-            
-            data[subjectId].progress = 100;
-            saveData(data);
-            initializeTracker();
-            updateStats();
-            showNotification(`Great! ${getSubjectName(subjectId)} completed for today! 🌟`);
-        }
-
-        // Get subject name by ID
-        function getSubjectName(id) {
-            const subject = subjects.find(s => s.id === id);
-            return subject ? subject.name : 'Subject';
-        }
-
-        // Update statistics
-        function updateStats() {
-            const data = loadData();
-            let totalProgress = 0;
-            let completedCount = 0;
-            let totalHours = 0;
-
-            subjects.forEach(subject => {
-                const subjectData = data[subject.id] || { progress: 0, hoursLogged: 0 };
-                totalProgress += subjectData.progress;
-                if (subjectData.progress === 100) completedCount++;
-                totalHours += subjectData.hoursLogged;
-            });
-
-            const avgProgress = Math.round(totalProgress / subjects.length);
-            document.getElementById('totalProgress').textContent = avgProgress + '%';
-            document.getElementById('completedCount').textContent = completedCount;
-            document.getElementById('hoursLogged').textContent = totalHours.toFixed(1);
-
-            // Update streak
-            const streakData = localStorage.getItem('streak') || '0';
-            document.getElementById('streakCount').textContent = streakData;
-        }
-
-        // Show notification
-        function showNotification(message) {
-            const notif = document.createElement('div');
-            notif.className = 'notification';
-            notif.textContent = message;
-            document.body.appendChild(notif);
-
-            setTimeout(() => {
-                notif.remove();
-            }, 3000);
-        }
-
-        // Schedule daily reminder
-        function scheduleDailyReminder() {
-            const now = new Date();
-            const next = new Date(now);
-            next.setDate(next.getDate() + 1);
-            next.setHours(9, 0, 0, 0);
-
-            const timeUntil = next - now;
-            document.getElementById('nextReminder').textContent = `Next reminder at 9:00 AM tomorrow`;
-
-            setTimeout(() => {
-                showNotification('📚 Daily Study Reminder! Time to log your progress!');
-                scheduleDailyReminder();
-            }, timeUntil);
-        }
-
-        // Request notification permission
-        function requestNotificationPermission() {
-            if ('Notification' in window) {
-                if (Notification.permission === 'granted') {
-                    console.log('Notifications already enabled');
-                } else if (Notification.permission !== 'denied') {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === 'granted') {
-                            new Notification('Study Tracker Active', {
-                                body: 'You will receive daily study reminders!',
-                                icon: '📚'
-                            });
-                        }
-                    });
-                }
-            }
-        }
-
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            requestNotificationPermission();
-            initializeTracker();
-            updateStats();
-            scheduleDailyReminder();
-        });
-    
-
-        // Add new topic
-        function addNewTopic() {
-            const topicName = prompt('Enter topic name:', '');
-            const dailyGoalHours = prompt('Enter daily goal in hours (e.g., 1 for 1 hour, 0.5 for 30 min):', '1');
-            const iconEmoji = prompt('Enter emoji icon:', '📚');
-            
-            if (topicName && dailyGoalHours) {
-                const newId = Math.max(...subjects.map(s => s.id)) + 1;
-                const newTopic = {
-                    id: newId,
-                    name: topicName,
-                    dailyGoal: parseFloat(dailyGoalHours),
-                    icon: iconEmoji
-                };
-                subjects.push(newTopic);
-localStorage.setItem('topics', JSON.stringify(subjects));
-     initializeTracker();
-     updateStats();
-            }
-        }
-        
-        // Delete last topic
-        function deleteLastTopic() {
-            if (subjects.length > 1) {
-                const lastTopic = subjects[subjects.length - 1];
-                if (confirm(`Delete topic "${lastTopic.name}"?`)) {
-                    subjects.pop();
-                    saveData(loadData());
-                         localStorage.setItem('topics', JSON.stringify(subjects));
-     initializeTracker();
-     updateStats();
-
-                }
-            } else {
-                alert('Cannot delete the last topic!');
-            }
-        }
-
-        
-        // Your Personalized Study Schedule
-        const dailySchedule = [            { time: '05:30', endTime: '06:30', subject: 'Typing', hours: 0.5, icon: 'keyboard' },
-            { time: '06:30', endTime: '07:30', subject: 'SQL & Database', hours: 1, icon: 'database' },
-            { time: '08:30', endTime: '18:30', subject: 'Office (Amazon)', hours: 10, icon: 'work', isBreak: true },
-            { time: '18:30', endTime: '19:30', subject: 'AutoCAD & SolidWorks 2026', hours: 1, icon: 'design' },
-            { time: '20:30', endTime: '22:30', subject: 'AI + Cybersecurity 2026', hours: 2, icon: 'security' },
-            { time: '22:30', endTime: '23:30', subject: 'Excel & Data', hours: 1, icon: 'analytics' },
-            { time: '23:30', endTime: '00:30', subject: 'English & Communication', hours: 1, icon: 'chat' }
+<div class="container">
+<header>
+<h1>⚡ Anil 2026 Study Project</h1>
+<p class="subtitle">Track your daily learning progress with real-time notifications</p>
+</header>
+<div class="stats">
+<div class="stat-item"><h3 id="totalProgress">0%</h3><p>Overall Progress</p></div>
+<div class="stat-item"><h3 id="completedCount">0</h3><p>Subjects Completed</p></div>
+<div class="stat-item"><h3 id="streakCount">0</h3><p>Day Streak</p></div>
+<div class="stat-item"><h3 id="hoursLogged">0</h3><p>Hours Logged</p></div>
+</div>
+<div class="tracker-section" id="trackerContainer"></div>
+<div class="reminder-box">
+<div class="button-group">
+<button onclick="addNewTopic()" style="background-color: #4CAF50;">+ Add Topic</button>
+<button onclick="deleteLastTopic()" style="background-color: #f44336;">- Delete Topic</button>
+</div>
+<p>🔔 Daily Reminder: Keep learning! Every 24 hours you maintain your streak.</p>
+<p id="nextReminder"></p>
+</div>
+</div>
+<script>
+let subjects = [];
+function loadSubjects() { const stored = localStorage.getItem('topics'); if (stored) { try { subjects = JSON.parse(stored); } catch(e) { localStorage.removeItem('topics'); initDefaults(); } } else { initDefaults(); } }
+function initDefaults() { subjects = [ { id: 1, name: 'AutoCAD & SolidWorks 2026', dailyGoal: 1, icon: '📋' }, { id: 2, name: 'SQL & Database', dailyGoal: 1.5, icon: '🗄️' }, { id: 5, name: 'AI + Cybersecurity 2026', dailyGoal: 1.5, icon: '🔐' }, { id: 6, name: 'Excel & Data', dailyGoal: 1, icon: '📊' }, { id: 7, name: 'Typing', dailyGoal: 0.5, icon: '⌨️' }, { id: 8, name: 'English & Communication', dailyGoal: 1, icon: '💬' } ]; }
+function loadData() { return localStorage.getItem('studyData') ? JSON.parse(localStorage.getItem('studyData')) : {}; }
+function saveData(d) { localStorage.setItem('studyData', JSON.stringify(d)); }
+function saveSubs() { localStorage.setItem('topics', JSON.stringify(subjects)); }
+function initTracker() { const c = document.getElementById('trackerContainer'); c.innerHTML = ''; const d = loadData(); subjects.forEach(s => { const sd = d[s.id] || { progress: 0, hoursLogged: 0 }; const card = document.createElement('div'); card.className = 'subject-card'; card.innerHTML = `<div class="subject-title">${s.icon} ${s.name}</div><p style="color: #666; font-size: 0.9em; margin-bottom: 10px;">Daily Goal: ${s.dailyGoal}h</p><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(sd.progress, 100)}%">${Math.round(sd.progress)}%</div></div><p style="color: #999; font-size: 0.85em; margin: 10px 0;">Hours: ${sd.hoursLogged}h</p><div class="controls"><button onclick="addProg(${s.id}, ${s.dailyGoal})">+30 min</button><button onclick="complete(${s.id})" class="complete">✓ Done</button></div>`; c.appendChild(card); }); }
+function addProg(id, goal) { const d = loadData(); if (!d[id]) d[id] = { progress: 0, hoursLogged: 0 }; d[id].hoursLogged += 0.5; d[id].progress = Math.min((d[id].hoursLogged / goal) * 100, 100); saveData(d); initTracker(); updateStats(); notify('Added 30 min!'); }
+function complete(id) { const d = loadData(); if (!d[id]) d[id] = { progress: 0, hoursLogged: 0 }; d[id].progress = 100; saveData(d); initTracker(); updateStats(); notify('Complete! 🌟'); }
+function updateStats() { const d = loadData(); let total = 0, comp = 0, hours = 0; subjects.forEach(s => { const sd = d[s.id] || { progress: 0, hoursLogged: 0 }; total += sd.progress; if (sd.progress === 100) comp++; hours += sd.hoursLogged; }); const avg = subjects.length > 0 ? Math.round(total / subjects.length) : 0; document.getElementById('totalProgress').textContent = avg + '%'; document.getElementById('completedCount').textContent = comp; document.getElementById('hoursLogged').textContent = hours.toFixed(1); document.getElementById('streakCount').textContent = localStorage.getItem('streak') || '0'; }
+function notify(msg) { const n = document.createElement('div'); n.className = 'notification'; n.textContent = msg; document.body.appendChild(n); setTimeout(() => n.remove(), 3000); }
+function addNewTopic() { const name = prompt('Topic name:'); if (!name || name.trim() === '') return; const goalStr = prompt('Daily goal hours (e.g., 1 or 0.5):'); if (!goalStr || goalStr.trim() === '') return; const goal = parseFloat(goalStr); if (isNaN(goal) || goal <= 0) { notify('Invalid!'); return; } const icon = prompt('Icon:', '📚'); const id = Math.max(...subjects.map(s => s.id), 0) + 1; subjects.push({ id, name: name.trim(), dailyGoal: goal, icon: icon || '📚' }); saveSubs(); initTracker(); updateStats(); notify(`Added: ${name}`); }
+function deleteLastTopic() { if (subjects.length <= 1) { alert('Keep at least 1 topic'); return; } const last = subjects[subjects.length - 1]; if (confirm(`Delete "${last.name}"?`)) { subjects.pop(); saveSubs(); initTracker(); updateStats(); notify('Deleted'); } }
+window.addEventListener('DOMContentLoaded', () => { loadSubjects(); initTracker(); updateStats(); });
+</script>
 </body>
 </html>
